@@ -6,7 +6,7 @@
 
 This exercise is broken into two parts to help simplify the process of explaining it as well as to make it easier to solve. The second part is harder than the first, so if you get stuck feel free to move on to another problem then come back to part 2 later.
 
-*Note: I didn't break this into multiple exercises like I do for some exercises because both of these combined should only take ~30m to cover in screencasts.*
+_Note: I didn't break this into multiple exercises like I do for some exercises because both of these combined should only take ~30m to cover in screencasts._
 
 ### Part 1
 
@@ -16,7 +16,7 @@ The CSV file should default to `problems.csv` (example shown below), but the use
 
 The CSV file will be in a format like below, where the first column is a question and the second column in the same row is the answer to that question.
 
-```
+```text
 5+5,10
 7+3,10
 1+1,2
@@ -36,7 +36,7 @@ You can assume that quizzes will be relatively short (< 100 questions) and will 
 
 At the end of the quiz the program should output the total number of questions correct and how many questions there were in total. Questions given invalid answers are considered incorrect.
 
-**NOTE:** *CSV files may have questions with commas in them. Eg: `"what 2+2, sir?",4` is a valid row in a CSV. I suggest you look into the CSV package in Go and don't try to write your own CSV parser.*
+**NOTE:** _CSV files may have questions with commas in them. Eg: `"what 2+2, sir?",4` is a valid row in a CSV. I suggest you look into the CSV package in Go and don't try to write your own CSV parser._
 
 ### Part 2
 
@@ -52,5 +52,5 @@ At the end of the quiz the program should still output the total number of quest
 
 As a bonus exercises you can also...
 
-1. Add string trimming and cleanup to help ensure that correct answers with extra whitespace, capitalization, etc are not considered incorrect. *Hint: Check out the [strings](https://golang.org/pkg/strings/) package.*
+1. Add string trimming and cleanup to help ensure that correct answers with extra whitespace, capitalization, etc are not considered incorrect. _Hint: Check out the [strings](https://golang.org/pkg/strings/) package._
 2. Add an option (a new flag) to shuffle the quiz order each time it is run.
