@@ -87,11 +87,11 @@ func Quiz() error {
 		// score quiz if done or >tlimit
 		select {
 		case <-quit:
-			fmt.Printf("> You scored %d out of %d.", correct, n)
+			fmt.Printf("> You scored %d out of %d.\n", correct, n)
 			return nil
 		case <-timer.C:
 			fmt.Println("\n> Time's up!")
-			fmt.Printf("> You scored %d out of %d.", correct, n)
+			fmt.Printf("> You scored %d out of %d.\n", correct, n)
 			return nil
 		}
 	}
