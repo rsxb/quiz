@@ -17,7 +17,7 @@ func init() {
 
 func main() {
 	flag.Parse()
-	err := quiz()
+	err := Quiz()
 	if err != nil {
 		log.Fatalf("[ERROR] %s", err)
 	}

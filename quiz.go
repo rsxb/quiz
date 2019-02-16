@@ -8,18 +8,13 @@ import (
 	"time"
 )
 
+// problem is a quiz question-answer pair.
 type problem struct {
 	question string
 	answer   string
 }
 
-func convert(record []string) problem {
-	return problem{
-		question: record[0],
-		answer:   record[1],
-	}
-}
-
+// parseCSV processes csv files and returns quiz problems.
 func parseCSV() ([]problem, error) {
 	f, err := os.Open(filename)
 	if err != nil {
@@ -32,6 +27,7 @@ func parseCSV() ([]problem, error) {
 		return nil, fmt.Errorf("parseCSV: %s", err)
 	}
 
+	// convert records to problems, line-by-line
 	problems := make([]problem, 0)
 	for {
 		record, err := r.Read()
@@ -41,12 +37,20 @@ func parseCSV() ([]problem, error) {
 		if err != nil {
 			return nil, fmt.Errorf("parseCSV: %s", err)
 		}
-		problems = append(problems, convert(record))
+		problems = append(
+			problems,
+			problem{
+				question: record[0],
+				answer:   record[1],
+			},
+		)
 	}
 	return problems, nil
 }
 
-func quiz() error {
+// Quiz presents problems to the user.
+// Quizzes have configurable time limits.
+func Quiz() error {
 	problems, err := parseCSV()
 	if err != nil {
 		return fmt.Errorf("quiz: %s", err)
@@ -61,21 +65,21 @@ func quiz() error {
 	fmt.Print("Press enter to start...")
 	fmt.Scanln()
 	go func() {
-		time.Sleep(time.Duration(limit) * time.Second)
+		time.Sleep(time.Duration(limit) * time.Second) // wait until time limit expires
 		timeout <- true
 	}()
 
 	go func() {
-		for i, v := range problems {
-			// question and answer pair
-			q, a := v.question, v.answer
-			fmt.Printf("Problem #%d: %s = ", i+1, q)
+		for i, p := range problems {
+			q, a := p.question, p.answer
+			fmt.Printf("Problem #%d:\t%s = ", i+1, q)
 
-			// user response
-			var resp string
-			fmt.Scanln(&resp)
+			// read user input
+			var input string
+			fmt.Scanln(&input)
 
-			if a == resp {
+			// test for correct answer
+			if a == input {
 				correct++
 			}
 		}
@@ -83,6 +87,7 @@ func quiz() error {
 	}()
 
 	for {
+		// score quiz if done or >tlimit
 		select {
 		case <-quit:
 			fmt.Printf("You scored %d out of %d.", correct, n)
