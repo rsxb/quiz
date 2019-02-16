@@ -62,14 +62,9 @@ func Quiz() error {
 	// number of correct answers
 	correct := 0
 	quit := make(chan int)
-	timeout := make(chan bool, 1)
-
-	fmt.Print("Press enter to start...")
+	fmt.Print("> Press enter to begin...")
 	fmt.Scanln()
-	go func() {
-		time.Sleep(time.Duration(limit) * time.Second) // wait until time limit expires
-		timeout <- true
-	}()
+	timer := time.NewTimer(time.Duration(limit) * time.Second)
 
 	go func() {
 		in := bufio.NewReader(os.Stdin)
@@ -92,10 +87,11 @@ func Quiz() error {
 		// score quiz if done or >tlimit
 		select {
 		case <-quit:
-			fmt.Printf("You scored %d out of %d.", correct, n)
+			fmt.Printf("> You scored %d out of %d.", correct, n)
 			return nil
-		case <-timeout:
-			fmt.Printf("\nYou scored %d out of %d.", correct, n)
+		case <-timer.C:
+			fmt.Println("\n> Time's up!")
+			fmt.Printf("> You scored %d out of %d.", correct, n)
 			return nil
 		}
 	}
