@@ -23,13 +23,13 @@ func convert(record []string) problem {
 func parseCSV() ([]problem, error) {
 	f, err := os.Open(filename)
 	if err != nil {
-		return nil, fmt.Errorf("parseCSV: failed to open file: %s", err)
+		return nil, fmt.Errorf("parseCSV: %s", err)
 	}
 	defer f.Close()
 
 	r := csv.NewReader(f)
 	if err != nil {
-		return nil, fmt.Errorf("parseCSV: failed to parse file: %s", err)
+		return nil, fmt.Errorf("parseCSV: %s", err)
 	}
 
 	problems := make([]problem, 0)
@@ -39,7 +39,7 @@ func parseCSV() ([]problem, error) {
 			break
 		}
 		if err != nil {
-			return nil, fmt.Errorf("parseCSV: failed to parse csv file: %s", err)
+			return nil, fmt.Errorf("parseCSV: %s", err)
 		}
 		problems = append(problems, convert(record))
 	}
