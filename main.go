@@ -11,7 +11,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&filename, "f", "problems.csv", "filename of CSV problem set")
+	flag.StringVar(&filename, "f", "problems.csv", "a csv file in 'question,answer' format")
 	flag.IntVar(&limit, "limit", 30, "time limit in seconds")
 }
 

@@ -10,14 +10,14 @@ import (
 func quiz() error {
 	f, err := os.Open(filename)
 	if err != nil {
-		return fmt.Errorf("quiz: failed to open problem set: %s", err)
+		return fmt.Errorf("quiz: failed to open csv file: %s", err)
 	}
 	defer f.Close()
 
 	r := csv.NewReader(f)
 	records, err := r.ReadAll()
 	if err != nil {
-		return fmt.Errorf("quiz: error reading problem: %s", err)
+		return fmt.Errorf("quiz: failed to parse csv file: %s", err)
 	}
 	n := len(records)
 
