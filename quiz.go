@@ -3,23 +3,55 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"io"
 	"os"
 	"time"
 )
 
-func quiz() error {
+type problem struct {
+	question string
+	answer   string
+}
+
+func convert(record []string) problem {
+	return problem{
+		question: record[0],
+		answer:   record[1],
+	}
+}
+
+func parseCSV() ([]problem, error) {
 	f, err := os.Open(filename)
 	if err != nil {
-		return fmt.Errorf("quiz: failed to open csv file: %s", err)
+		return nil, fmt.Errorf("parseCSV: failed to open file: %s", err)
 	}
 	defer f.Close()
 
 	r := csv.NewReader(f)
-	records, err := r.ReadAll()
 	if err != nil {
-		return fmt.Errorf("quiz: failed to parse csv file: %s", err)
+		return nil, fmt.Errorf("parseCSV: failed to parse file: %s", err)
 	}
-	n := len(records)
+
+	problems := make([]problem, 0)
+	for {
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("parseCSV: failed to parse csv file: %s", err)
+		}
+		problems = append(problems, convert(record))
+	}
+	return problems, nil
+}
+
+func quiz() error {
+	problems, err := parseCSV()
+	if err != nil {
+		return fmt.Errorf("quiz: %s", err)
+	}
+	n := len(problems)
 
 	// number of correct answers
 	correct := 0
@@ -34,9 +66,9 @@ func quiz() error {
 	}()
 
 	go func() {
-		for i, v := range records {
+		for i, v := range problems {
 			// question and answer pair
-			q, a := v[0], v[1]
+			q, a := v.question, v.answer
 			fmt.Printf("Problem #%d: %s = ", i+1, q)
 
 			// user response
