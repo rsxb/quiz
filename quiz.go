@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"encoding/csv"
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -53,7 +55,7 @@ func parseCSV() ([]problem, error) {
 func Quiz() error {
 	problems, err := parseCSV()
 	if err != nil {
-		return fmt.Errorf("quiz: %s", err)
+		return fmt.Errorf("Quiz: %s", err)
 	}
 	n := len(problems)
 
@@ -70,16 +72,16 @@ func Quiz() error {
 	}()
 
 	go func() {
+		in := bufio.NewReader(os.Stdin)
 		for i, p := range problems {
 			q, a := p.question, p.answer
 			fmt.Printf("Problem #%d:\t%s = ", i+1, q)
 
 			// read user input
-			var input string
-			fmt.Scanln(&input)
+			input, _ := in.ReadString('\n')
 
 			// test for correct answer
-			if a == input {
+			if a == strings.TrimSpace(input) {
 				correct++
 			}
 		}
