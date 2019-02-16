@@ -2,22 +2,10 @@ package main
 
 import (
 	"encoding/csv"
-	"flag"
 	"fmt"
-	"log"
 	"os"
 	"time"
 )
-
-var (
-	filename string
-	limit    int
-)
-
-func init() {
-	flag.StringVar(&filename, "f", "problems.csv", "filename of CSV problem set")
-	flag.IntVar(&limit, "limit", 30, "time limit in seconds")
-}
 
 func quiz() error {
 	f, err := os.Open(filename)
@@ -71,13 +59,5 @@ func quiz() error {
 			fmt.Printf("\nYou scored %d out of %d.", correct, n)
 			return nil
 		}
-	}
-}
-
-func main() {
-	flag.Parse()
-	err := quiz()
-	if err != nil {
-		log.Fatalf("Error starting quiz game: %s", err)
 	}
 }
